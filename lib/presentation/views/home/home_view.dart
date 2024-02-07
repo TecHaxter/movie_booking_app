@@ -1,6 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_booking_app/presentation/views/home/widgets/inward_rounded_border_painter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_booking_app/core/constant/color_palette.dart';
+import 'package:movie_booking_app/presentation/bloc/upcoming_movies/upcoming_movies_bloc.dart';
+import 'package:movie_booking_app/presentation/bloc/upcoming_movies/upcoming_movies_event.dart';
+import 'package:movie_booking_app/presentation/bloc/upcoming_movies/upcoming_movies_state.dart';
+import 'package:movie_booking_app/presentation/views/home/widgets/flexible_space_movie_thumbnail.dart';
+import 'package:movie_booking_app/presentation/views/home/widgets/upcoming_movies_grid_view.dart';
+import 'package:movie_booking_app/presentation/widgets/shimmer.dart';
 
 @RoutePage()
 class HomeView extends StatefulWidget {
@@ -19,6 +26,8 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
+    context.read<UpcomingMoviesBloc>().add(OnFetchUpcomingMovies());
+
     _scrollController = ScrollController();
     _controller = AnimationController(
       vsync: this,
@@ -26,111 +35,136 @@ class _HomeViewState extends State<HomeView>
     );
 
     _titleColorTween = ColorTween(
-      begin: Colors.white, // Color when expanded
+      begin: const Color.fromRGBO(255, 255, 255, 1), // Color when expanded
       end: Colors.black, // Color when shrunk
     ).animate(_controller);
 
     // Add a listener to the scroll controller to trigger the animation on scroll
     _scrollController.addListener(() {
-      if (_scrollController.offset > (400 - kToolbarHeight)) {
+      if (_scrollController.offset > (400 - kToolbarHeight) &&
+          _controller.value == 1.0) {
         _controller
-            .forward(); // Start the animation when scrolled beyond a certain offset
-      } else if (_scrollController.offset < (400 - kToolbarHeight)) {
-        _controller.reverse(); // Reverse the animation when scrolling back up
+            .reverse(); // Start the animation when scrolled beyond a certain offset
+        setState(() {});
+      } else if (_scrollController.offset < (400 - kToolbarHeight) &&
+          _controller.value == 0.0) {
+        _controller.forward(); // Reverse the animation when scrolling back up
+        setState(() {});
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).viewPadding.top;
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverAppBar(
-            primary: true,
-            pinned: true,
-            title: Text(
-              'Movie ticket',
-              style: TextStyle(
-                color: _titleColorTween.value,
-              ),
-            ),
-            actions: [
-              Icon(
-                Icons.menu,
-                color: _titleColorTween.value,
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
-            expandedHeight: 400,
-            collapsedHeight: kToolbarHeight,
-            flexibleSpace: LayoutBuilder(
-              builder: (context, constraints) {
-                print(
-                    '${constraints.biggest} ${constraints.smallest} ${constraints.maxHeight}');
-                final maxHeight = constraints.maxHeight;
-                final top = constraints.biggest.height;
-
-                return AnimatedOpacity(
-                  opacity: 1 - ((kToolbarHeight + statusBarHeight) / maxHeight),
-                  duration: const Duration(milliseconds: 100),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                          child: Container(
-                        color: Colors.indigo,
-                      )),
-                      const Text(
-                        'Your Name',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
+    return BlocListener<UpcomingMoviesBloc, UpcomingMoviesState>(
+      listener: (BuildContext context, state) {
+        if (state is UpcomingMoviesFailed) {
+          const snackBar = SnackBar(
+            content: Text('Error occurred while fetching upcoming movies'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+        if (state is UpcomingMoviesEmpty) {
+          const snackBar = SnackBar(
+            content: Text('No upcoming movies found'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
+      child: Shimmer(
+        linearGradient: const LinearGradient(
+          colors: [
+            ColorPalette.secondary,
+            Colors.white,
+          ],
+        ),
+        child: Scaffold(
+          body: NotificationListener<ScrollEndNotification>(
+            onNotification: (scrollNotification) {
+              if (scrollNotification.metrics.pixels >=
+                  scrollNotification.metrics.maxScrollExtent) {
+                context.read<UpcomingMoviesBloc>().add(OnFetchUpcomingMovies());
+              }
+              return true;
+            },
+            child: CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverAppBar(
+                  primary: true,
+                  pinned: true,
+                  actions: [
+                    Icon(
+                      Icons.menu,
+                      color: _titleColorTween.value,
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                  ],
+                  expandedHeight: 400,
+                  collapsedHeight: kToolbarHeight,
+                  bottom: PreferredSize(
+                    preferredSize: const Size(double.maxFinite, 16),
+                    child: Container(
+                      height: 16,
+                      width: double.maxFinite,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: SizedBox(
-                          height: maxHeight / 2,
-                          width: double.maxFinite,
-                          child: CustomPaint(
-                            painter: InwardBorderRoundedPainter(),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              width: double.maxFinite,
-              height: 20,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
+                  flexibleSpace: const FlexibleSpaceMovieThumbnail(),
                 ),
-              ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Upcoming Movies',
+                      style: TextStyle(
+                        color: Colors.grey[900],
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 16,
+                  ),
+                ),
+                const UpcomingMoviesGridView(),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 16,
+                  ),
+                ),
+                BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
+                  builder: (context, state) {
+                    if (state is UpcomingMoviesLoading) {
+                      return const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return const SliverToBoxAdapter();
+                  },
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 16,
+                  ),
+                ),
+              ],
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return ListTile(
-                  title: Text('Item $index'),
-                );
-              },
-              childCount: 50,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
