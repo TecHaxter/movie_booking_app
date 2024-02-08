@@ -6,3 +6,10 @@ class ColorPalette {
   static const Color tertiary = Color(0xFF07937D);
   static const Color surface = Color(0xFFFFD05B);
 }
+
+class GradientPallete {
+  static const LinearGradient shimmer = LinearGradient(colors: [
+    ColorPalette.secondary,
+    Colors.white,
+  ]);
+}

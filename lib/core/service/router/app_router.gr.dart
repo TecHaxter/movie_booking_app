@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    BookingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const BookingsView(),
+      );
+    },
     ChooseSeatRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -38,9 +44,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     TicketRoute.name: (routeData) {
+      final args = routeData.argsAs<TicketRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const TicketView(),
+        child: TicketView(
+          key: args.key,
+          ticket: args.ticket,
+        ),
       );
     },
     TrailerRoute.name: (routeData) {
@@ -54,6 +64,20 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
   };
+}
+
+/// generated route for
+/// [BookingsView]
+class BookingsRoute extends PageRouteInfo<void> {
+  const BookingsRoute({List<PageRouteInfo>? children})
+      : super(
+          BookingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'BookingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -123,16 +147,39 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TicketView]
-class TicketRoute extends PageRouteInfo<void> {
-  const TicketRoute({List<PageRouteInfo>? children})
-      : super(
+class TicketRoute extends PageRouteInfo<TicketRouteArgs> {
+  TicketRoute({
+    Key? key,
+    required TicketEntity ticket,
+    List<PageRouteInfo>? children,
+  }) : super(
           TicketRoute.name,
+          args: TicketRouteArgs(
+            key: key,
+            ticket: ticket,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'TicketRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<TicketRouteArgs> page = PageInfo<TicketRouteArgs>(name);
+}
+
+class TicketRouteArgs {
+  const TicketRouteArgs({
+    this.key,
+    required this.ticket,
+  });
+
+  final Key? key;
+
+  final TicketEntity ticket;
+
+  @override
+  String toString() {
+    return 'TicketRouteArgs{key: $key, ticket: $ticket}';
+  }
 }
 
 /// generated route for

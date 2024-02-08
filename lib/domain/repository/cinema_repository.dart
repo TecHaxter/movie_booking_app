@@ -10,7 +10,7 @@ abstract class CinemaRepository {
     MovieEntity movie, {
     required DateTime day,
   });
-  Future<Responser<TicketEntity?>> bookShow({
+  Future<Responser<TicketEntity?>> bookMyShow({
     required CinemaEntity cinema,
     required ShowTimeEntity showTime,
     required List<SeatEntity> seats,

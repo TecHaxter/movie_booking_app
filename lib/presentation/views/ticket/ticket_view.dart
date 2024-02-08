@@ -2,18 +2,28 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_booking_app/core/constant/color_palette.dart';
 import 'package:movie_booking_app/core/service/service.dart';
+import 'package:movie_booking_app/domain/entity/ticket_entity.dart';
 import 'package:movie_booking_app/presentation/views/ticket/widgets/ticket_shape.dart';
 
 @RoutePage()
 class TicketView extends StatelessWidget {
-  const TicketView({super.key});
+  final TicketEntity ticket;
+  const TicketView({
+    super.key,
+    required this.ticket,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: const Icon(Icons.close),
+        leading: InkWell(
+          onTap: () {
+            AppServices.router.popUntilRoot();
+          },
+          child: const Icon(Icons.close),
+        ),
         title: const Text('Your Ticket'),
       ),
       body: SizedBox(
@@ -22,7 +32,9 @@ class TicketView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const TicketShape(),
+            TicketShape(
+              ticket: ticket,
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -36,7 +48,7 @@ class TicketView extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                AppServices.router.pop();
+                AppServices.router.popUntilRoot();
               },
               child: const Text('Done'),
             ),

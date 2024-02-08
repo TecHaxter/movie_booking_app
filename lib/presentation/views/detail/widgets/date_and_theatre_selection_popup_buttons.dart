@@ -4,13 +4,20 @@ import 'package:movie_booking_app/core/util/extensions/date_time_extension.dart'
 import 'package:movie_booking_app/domain/entity/cinema_entity.dart';
 import 'package:movie_booking_app/presentation/bloc/cinemas/cinemas_bloc.dart';
 import 'package:movie_booking_app/presentation/bloc/cinemas/cinemas_state.dart';
-import 'package:movie_booking_app/presentation/bloc/reservation/reservation_bloc.dart';
-import 'package:movie_booking_app/presentation/bloc/reservation/reservation_event.dart';
-import 'package:movie_booking_app/presentation/bloc/reservation/reservation_state.dart';
+import 'package:movie_booking_app/presentation/bloc/reservation/input/reservation_event.dart';
+import 'package:movie_booking_app/presentation/bloc/reservation/input/reservation_input_bloc.dart';
+import 'package:movie_booking_app/presentation/bloc/reservation/input/reservation_input_state.dart';
 
-class DateAndTheatreSelectionPopupButtons extends StatelessWidget {
+class DateAndTheatreSelectionPopupButtons extends StatefulWidget {
   const DateAndTheatreSelectionPopupButtons({super.key});
 
+  @override
+  State<DateAndTheatreSelectionPopupButtons> createState() =>
+      _DateAndTheatreSelectionPopupButtonsState();
+}
+
+class _DateAndTheatreSelectionPopupButtonsState
+    extends State<DateAndTheatreSelectionPopupButtons> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -32,15 +39,17 @@ class DateAndTheatreSelectionPopupButtons extends StatelessWidget {
                     if (value == null) {
                       return;
                     }
-                    context.read<ReservationBloc>().add(OnSelectDate(value));
+                    context
+                        .read<ReservationInputBloc>()
+                        .add(OnSelectDate(value));
                   });
                 },
-                child: BlocBuilder<ReservationBloc, ReservationState>(
+                child: BlocBuilder<ReservationInputBloc, ReservationInputState>(
                     builder: (context, state) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(state.date?.dMMMyyyy ?? 'Today, 17 May'),
+                      Text(state.date?.dMMMyyyy ?? 'Select a Date'),
                       const Icon(
                         Icons.arrow_drop_down,
                       ),
@@ -73,32 +82,41 @@ class DateAndTheatreSelectionPopupButtons extends StatelessWidget {
                     if (cinemasState is CinemasLoaded) {
                       cinemas = cinemasState.cinemas;
                     }
-                    return BlocBuilder<ReservationBloc, ReservationState>(
+                    return BlocBuilder<ReservationInputBloc,
+                            ReservationInputState>(
                         builder: (context, reservationState) {
-                      return DropdownButton<CinemaEntity>(
+                      return DropdownButton<int>(
                         isDense: true,
                         isExpanded: true,
-                        hint: const Text('Change Location'),
+                        hint: const Text('Select Cinema'),
                         icon: const Icon(
                           Icons.location_pin,
                           size: 14,
                         ),
-                        value: cinemas.isEmpty ? null : reservationState.cinema,
+                        value: reservationState.cinema?.id,
                         items: cinemas
                             .map(
-                              (e) => DropdownMenuItem<CinemaEntity>(
-                                value: e,
-                                child: Text(e.name!),
+                              (e) => DropdownMenuItem<int>(
+                                value: e.id,
+                                child: Text(e.name ?? ''),
                               ),
                             )
                             .toList(),
-                        onChanged: (CinemaEntity? value) {
-                          if (value == null) {
+                        onChanged: (int? id) {
+                          if (id == null) {
+                            return;
+                          }
+                          final CinemaEntity? cinema =
+                              cinemas.cast<CinemaEntity?>().firstWhere(
+                                    (e) => e?.id == id,
+                                    orElse: () => null,
+                                  );
+                          if (cinema == null) {
                             return;
                           }
                           context
-                              .read<ReservationBloc>()
-                              .add(OnSelectCinema(value));
+                              .read<ReservationInputBloc>()
+                              .add(OnSelectCinema(cinema));
                         },
                       );
                     });

@@ -7,7 +7,6 @@ import 'package:movie_booking_app/domain/entity/movie_entity.dart';
 import 'package:movie_booking_app/presentation/bloc/upcoming_movies/upcoming_movies_bloc.dart';
 import 'package:movie_booking_app/presentation/bloc/upcoming_movies/upcoming_movies_state.dart';
 import 'package:movie_booking_app/presentation/widgets/app_network_image.dart';
-import 'package:movie_booking_app/presentation/widgets/shimmer.dart';
 
 class UpcomingMoviesGridView extends StatefulWidget {
   const UpcomingMoviesGridView({super.key});
@@ -38,18 +37,16 @@ class _UpcomingMoviesGridViewState extends State<UpcomingMoviesGridView> {
       child: SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
-            builder: (context, state) {
-          return SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 9 / 16,
-            ),
-            itemCount: movies.length,
-            itemBuilder: (context, index) => ShimmerLoading(
-              isLoading: movies[index] == null,
-              child: Column(
+          builder: (context, state) {
+            return SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 9 / 16,
+              ),
+              itemCount: movies.length,
+              itemBuilder: (context, index) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
@@ -111,7 +108,7 @@ class _UpcomingMoviesGridViewState extends State<UpcomingMoviesGridView> {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: movies[index]?.title ?? 'Movie Title',
+                      text: movies[index]?.title ?? 'Loading',
                       // children: const [
                       //   TextSpan(text: '\n'),
                       //   TextSpan(text: 'Part One of Four'),
@@ -125,9 +122,9 @@ class _UpcomingMoviesGridViewState extends State<UpcomingMoviesGridView> {
                   ),
                 ],
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }

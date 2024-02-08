@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'reservation_state.dart';
+part of 'reservation_input_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,37 +15,40 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$ReservationState {
+mixin _$ReservationInputState {
   DateTime? get date => throw _privateConstructorUsedError;
   CinemaEntity? get cinema => throw _privateConstructorUsedError;
   ShowTimeEntity? get showTime => throw _privateConstructorUsedError;
-  List<SeatEntity>? get seats => throw _privateConstructorUsedError;
+  List<SeatEntity>? get selectedSeats => throw _privateConstructorUsedError;
+  String? get inputError => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $ReservationStateCopyWith<ReservationState> get copyWith =>
+  $ReservationInputStateCopyWith<ReservationInputState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReservationStateCopyWith<$Res> {
-  factory $ReservationStateCopyWith(
-          ReservationState value, $Res Function(ReservationState) then) =
-      _$ReservationStateCopyWithImpl<$Res, ReservationState>;
+abstract class $ReservationInputStateCopyWith<$Res> {
+  factory $ReservationInputStateCopyWith(ReservationInputState value,
+          $Res Function(ReservationInputState) then) =
+      _$ReservationInputStateCopyWithImpl<$Res, ReservationInputState>;
   @useResult
   $Res call(
       {DateTime? date,
       CinemaEntity? cinema,
       ShowTimeEntity? showTime,
-      List<SeatEntity>? seats});
+      List<SeatEntity>? selectedSeats,
+      String? inputError});
 
   $CinemaEntityCopyWith<$Res>? get cinema;
   $ShowTimeEntityCopyWith<$Res>? get showTime;
 }
 
 /// @nodoc
-class _$ReservationStateCopyWithImpl<$Res, $Val extends ReservationState>
-    implements $ReservationStateCopyWith<$Res> {
-  _$ReservationStateCopyWithImpl(this._value, this._then);
+class _$ReservationInputStateCopyWithImpl<$Res,
+        $Val extends ReservationInputState>
+    implements $ReservationInputStateCopyWith<$Res> {
+  _$ReservationInputStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -58,7 +61,8 @@ class _$ReservationStateCopyWithImpl<$Res, $Val extends ReservationState>
     Object? date = freezed,
     Object? cinema = freezed,
     Object? showTime = freezed,
-    Object? seats = freezed,
+    Object? selectedSeats = freezed,
+    Object? inputError = freezed,
   }) {
     return _then(_value.copyWith(
       date: freezed == date
@@ -73,10 +77,14 @@ class _$ReservationStateCopyWithImpl<$Res, $Val extends ReservationState>
           ? _value.showTime
           : showTime // ignore: cast_nullable_to_non_nullable
               as ShowTimeEntity?,
-      seats: freezed == seats
-          ? _value.seats
-          : seats // ignore: cast_nullable_to_non_nullable
+      selectedSeats: freezed == selectedSeats
+          ? _value.selectedSeats
+          : selectedSeats // ignore: cast_nullable_to_non_nullable
               as List<SeatEntity>?,
+      inputError: freezed == inputError
+          ? _value.inputError
+          : inputError // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -106,18 +114,20 @@ class _$ReservationStateCopyWithImpl<$Res, $Val extends ReservationState>
 }
 
 /// @nodoc
-abstract class _$$ReservationStateImplCopyWith<$Res>
-    implements $ReservationStateCopyWith<$Res> {
-  factory _$$ReservationStateImplCopyWith(_$ReservationStateImpl value,
-          $Res Function(_$ReservationStateImpl) then) =
-      __$$ReservationStateImplCopyWithImpl<$Res>;
+abstract class _$$ReservationInputStateImplCopyWith<$Res>
+    implements $ReservationInputStateCopyWith<$Res> {
+  factory _$$ReservationInputStateImplCopyWith(
+          _$ReservationInputStateImpl value,
+          $Res Function(_$ReservationInputStateImpl) then) =
+      __$$ReservationInputStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {DateTime? date,
       CinemaEntity? cinema,
       ShowTimeEntity? showTime,
-      List<SeatEntity>? seats});
+      List<SeatEntity>? selectedSeats,
+      String? inputError});
 
   @override
   $CinemaEntityCopyWith<$Res>? get cinema;
@@ -126,11 +136,12 @@ abstract class _$$ReservationStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ReservationStateImplCopyWithImpl<$Res>
-    extends _$ReservationStateCopyWithImpl<$Res, _$ReservationStateImpl>
-    implements _$$ReservationStateImplCopyWith<$Res> {
-  __$$ReservationStateImplCopyWithImpl(_$ReservationStateImpl _value,
-      $Res Function(_$ReservationStateImpl) _then)
+class __$$ReservationInputStateImplCopyWithImpl<$Res>
+    extends _$ReservationInputStateCopyWithImpl<$Res,
+        _$ReservationInputStateImpl>
+    implements _$$ReservationInputStateImplCopyWith<$Res> {
+  __$$ReservationInputStateImplCopyWithImpl(_$ReservationInputStateImpl _value,
+      $Res Function(_$ReservationInputStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -139,9 +150,10 @@ class __$$ReservationStateImplCopyWithImpl<$Res>
     Object? date = freezed,
     Object? cinema = freezed,
     Object? showTime = freezed,
-    Object? seats = freezed,
+    Object? selectedSeats = freezed,
+    Object? inputError = freezed,
   }) {
-    return _then(_$ReservationStateImpl(
+    return _then(_$ReservationInputStateImpl(
       date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -154,20 +166,28 @@ class __$$ReservationStateImplCopyWithImpl<$Res>
           ? _value.showTime
           : showTime // ignore: cast_nullable_to_non_nullable
               as ShowTimeEntity?,
-      seats: freezed == seats
-          ? _value._seats
-          : seats // ignore: cast_nullable_to_non_nullable
+      selectedSeats: freezed == selectedSeats
+          ? _value._selectedSeats
+          : selectedSeats // ignore: cast_nullable_to_non_nullable
               as List<SeatEntity>?,
+      inputError: freezed == inputError
+          ? _value.inputError
+          : inputError // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ReservationStateImpl implements _ReservationState {
-  const _$ReservationStateImpl(
-      {this.date, this.cinema, this.showTime, final List<SeatEntity>? seats})
-      : _seats = seats;
+class _$ReservationInputStateImpl implements _ReservationInputState {
+  const _$ReservationInputStateImpl(
+      {this.date,
+      this.cinema,
+      this.showTime,
+      final List<SeatEntity>? selectedSeats,
+      this.inputError})
+      : _selectedSeats = selectedSeats;
 
   @override
   final DateTime? date;
@@ -175,51 +195,58 @@ class _$ReservationStateImpl implements _ReservationState {
   final CinemaEntity? cinema;
   @override
   final ShowTimeEntity? showTime;
-  final List<SeatEntity>? _seats;
+  final List<SeatEntity>? _selectedSeats;
   @override
-  List<SeatEntity>? get seats {
-    final value = _seats;
+  List<SeatEntity>? get selectedSeats {
+    final value = _selectedSeats;
     if (value == null) return null;
-    if (_seats is EqualUnmodifiableListView) return _seats;
+    if (_selectedSeats is EqualUnmodifiableListView) return _selectedSeats;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
+  final String? inputError;
+
+  @override
   String toString() {
-    return 'ReservationState(date: $date, cinema: $cinema, showTime: $showTime, seats: $seats)';
+    return 'ReservationInputState(date: $date, cinema: $cinema, showTime: $showTime, selectedSeats: $selectedSeats, inputError: $inputError)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReservationStateImpl &&
+            other is _$ReservationInputStateImpl &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.cinema, cinema) || other.cinema == cinema) &&
             (identical(other.showTime, showTime) ||
                 other.showTime == showTime) &&
-            const DeepCollectionEquality().equals(other._seats, _seats));
+            const DeepCollectionEquality()
+                .equals(other._selectedSeats, _selectedSeats) &&
+            (identical(other.inputError, inputError) ||
+                other.inputError == inputError));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, date, cinema, showTime,
-      const DeepCollectionEquality().hash(_seats));
+      const DeepCollectionEquality().hash(_selectedSeats), inputError);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ReservationStateImplCopyWith<_$ReservationStateImpl> get copyWith =>
-      __$$ReservationStateImplCopyWithImpl<_$ReservationStateImpl>(
-          this, _$identity);
+  _$$ReservationInputStateImplCopyWith<_$ReservationInputStateImpl>
+      get copyWith => __$$ReservationInputStateImplCopyWithImpl<
+          _$ReservationInputStateImpl>(this, _$identity);
 }
 
-abstract class _ReservationState implements ReservationState {
-  const factory _ReservationState(
+abstract class _ReservationInputState implements ReservationInputState {
+  const factory _ReservationInputState(
       {final DateTime? date,
       final CinemaEntity? cinema,
       final ShowTimeEntity? showTime,
-      final List<SeatEntity>? seats}) = _$ReservationStateImpl;
+      final List<SeatEntity>? selectedSeats,
+      final String? inputError}) = _$ReservationInputStateImpl;
 
   @override
   DateTime? get date;
@@ -228,9 +255,11 @@ abstract class _ReservationState implements ReservationState {
   @override
   ShowTimeEntity? get showTime;
   @override
-  List<SeatEntity>? get seats;
+  List<SeatEntity>? get selectedSeats;
+  @override
+  String? get inputError;
   @override
   @JsonKey(ignore: true)
-  _$$ReservationStateImplCopyWith<_$ReservationStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ReservationInputStateImplCopyWith<_$ReservationInputStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

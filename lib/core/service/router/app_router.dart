@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:movie_booking_app/domain/entity/movie_entity.dart';
-import 'package:movie_booking_app/domain/entity/show_time_entity.dart';
+import 'package:movie_booking_app/domain/entity/ticket_entity.dart';
+import 'package:movie_booking_app/presentation/views/bookings/bookings_view.dart';
 import 'package:movie_booking_app/presentation/views/choose_seat/choose_seat_view.dart';
 import 'package:movie_booking_app/presentation/views/detail/detail_view.dart';
 import 'package:movie_booking_app/presentation/views/home/home_view.dart';
@@ -31,6 +32,10 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: TrailerRoute.page,
+          // initial: true,
+        ),
+        AutoRoute(
+          page: BookingsRoute.page,
           // initial: true,
         ),
       ];

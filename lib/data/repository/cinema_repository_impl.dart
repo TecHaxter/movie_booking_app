@@ -1,4 +1,5 @@
 import 'package:movie_booking_app/core/util/http/responser.dart';
+import 'package:movie_booking_app/data/source/ticket_data_source.dart';
 import 'package:movie_booking_app/domain/entity/cinema_entity.dart';
 import 'package:movie_booking_app/domain/entity/movie_entity.dart';
 import 'package:movie_booking_app/domain/entity/seat_entity.dart';
@@ -9,6 +10,9 @@ import 'dart:math' as math;
 import 'package:movie_booking_app/domain/repository/cinema_repository.dart';
 
 class CinemaRepositoryImpl implements CinemaRepository {
+  final TicketDataSource ticketDataSource;
+  const CinemaRepositoryImpl(this.ticketDataSource);
+
   final List<Duration> _showTimesDifferenceHardcoded = const [
     Duration(hours: 3),
     Duration(hours: 6),
@@ -51,17 +55,49 @@ class CinemaRepositoryImpl implements CinemaRepository {
   }
 
   @override
-  Future<Responser<TicketEntity?>> bookShow(
+  Future<Responser<TicketEntity?>> bookMyShow(
       {required CinemaEntity cinema,
       required ShowTimeEntity showTime,
-      required List<SeatEntity> seats}) {
-    // TODO: implement bookShow
-    throw UnimplementedError();
+      required List<SeatEntity> seats}) async {
+    try {
+      TicketEntity ticket = TicketEntity(
+        id: math.Random(3631512069).nextInt(4986),
+        seats: seats,
+        cinema: cinema,
+        showTime: showTime,
+        bookedAt: DateTime.now(),
+      );
+      final res = await ticketDataSource.bookMyShow(
+        ticket: ticket.toJson(),
+      );
+      final data = res.fold((l) => null, (r) => r);
+      if (res.isLeft() || data != true) {
+        throw 'Error occurred in bookMyShow data source';
+      }
+      return success(ticket);
+    } catch (e) {
+      return failed(e.toString());
+    }
   }
 
   @override
-  Future<Responser<List<TicketEntity>?>> fetchBookedShows() {
-    // TODO: implement fetchBookedShows
-    throw UnimplementedError();
+  Future<Responser<List<TicketEntity>?>> fetchBookedShows() async {
+    try {
+      final res = await ticketDataSource.getMyShow();
+      if (res.isLeft()) {
+        throw 'Error occurred in getMyShow data source';
+      }
+      final data = res.fold(
+        (l) => null,
+        (r) => r
+            ?.map(
+              (e) => TicketEntity.fromJson(e),
+            )
+            .toList(),
+      );
+      return success(data);
+    } catch (e) {
+      return failed(e.toString());
+    }
   }
 }
