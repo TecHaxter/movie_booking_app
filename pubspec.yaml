@@ -24,6 +24,7 @@ dependencies:
   hive: ^2.2.3
   path_provider: ^2.1.2
   rxdart: ^0.27.7
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env #add this with your own API_KEY
 
 scripts: #shortcut build scripts
   build: dart run build_runner build --delete-conflicting-outputs

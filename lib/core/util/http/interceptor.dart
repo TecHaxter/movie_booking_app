@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:movie_booking_app/core/constant/config.dart';
 
 final InterceptorsWrapper apiKeyInterceptor = InterceptorsWrapper(
   onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
     options.queryParameters = options.queryParameters
-      ..addAll({'api_key': 'abde0aee1a34d3efd864c48ae3eab35a'});
+      ..addAll({'api_key': Config.apiKey});
     return handler.next(options);
   },
   onResponse: (Response response, ResponseInterceptorHandler handler) {
