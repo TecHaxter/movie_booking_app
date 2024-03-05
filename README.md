@@ -13,14 +13,14 @@ Watch Video Demo here https://photos.app.goo.gl/xx3Y1gZegyL3GSp98
 - Book tickets
 - Show All Bookings
 
-## Clean Architecture
-
-![Clean Architecture](https://raw.githubusercontent.com/TecHaxter/movie_booking_app/repository_setup/images/clean_architecture.png)
-
 ## Design Inspiration
 
 https://dribbble.com/shots/19094092-Ticket-Booking-App
 ![UI Design from Dribbble](https://raw.githubusercontent.com/TecHaxter/movie_booking_app/repository_setup/images/design_inspiration.png)
+
+## Clean Architecture
+
+![Clean Architecture](https://raw.githubusercontent.com/TecHaxter/movie_booking_app/repository_setup/images/clean_architecture.png)
 
 ## Screenshots
 
